@@ -23,6 +23,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,8 +43,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            var isTextClicked by remember { mutableStateOf(false) }
+            Log.d("Click", "$isTextClicked")
             KMPCursoTheme {
                 Card(
+                    modifier = Modifier.clickable {
+                        isTextClicked = !isTextClicked
+                        Log.d("Click", "$isTextClicked")
+                    },
                     shape = RoundedCornerShape(20),
                     elevation = CardDefaults.cardElevation(5.dp),
                     border = BorderStroke(1.dp, Color.Red)
@@ -50,14 +60,14 @@ class MainActivity : ComponentActivity() {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.baseline_person_24),
+                            painter = if (!isTextClicked) painterResource(id = R.drawable.baseline_person_24) else painterResource(id = R.drawable.baseline_mouse_24),
                             contentDescription = "Perfil"
                         )
                         CustomText(
                             modifier = Modifier
                                 .wrapContentSize()
                                 .background(Color.Gray),
-                            texto = "Hola",
+                            texto = if(isTextClicked) "Clicado" else "Hola!",
                             fontSize = 25.sp
                         )
                     }
